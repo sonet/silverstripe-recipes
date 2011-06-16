@@ -128,6 +128,9 @@ class SanitiseTasks_CleanHistory extends BuildTask {
 
 			echo "Final cleanup\n";
 
+			DB::query("DELETE FROM SiteTree WHERE ID NOT IN (SELECT RecordID FROM SiteTree_versions)");
+			DB::query("DELETE FROM SiteTree_Live WHERE ID NOT IN (SELECT RecordID FROM SiteTree_versions)");
+
 			foreach (ClassInfo::dataClassesFor('SiteTree') as $table) {
 				if ($table == 'SiteTree') continue;
 
