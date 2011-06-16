@@ -256,13 +256,13 @@ class  SanitiseTasks_CleanNonNavigatable extends BuildTask {
 		$siteTreeTables = ClassInfo::dataClassesFor('SiteTree');
 
 		if (class_exists('Subsite')) Subsite::$disable_subsite_filter = true;
-		$pages = DataObject::get('SiteTree', 'ID IN ('.implode(',', $ids).')');
+		$pages = DataObject::get('SiteTree', 'SiteTree.ID IN ('.implode(',', $ids).')');
 
 		foreach ($pages as $page) {
 			$parent = $page;
-			while ($parent && $parent->ParentID != 0) $parent = $parent->Parent();
+			while ($parent && $parent->ID != 0 && $parent->ParentID != 0 && $parent->ParentID != null) $parent = $parent->Parent();
 
-			if (!$parent) {
+			if (!$parent || $parent->ID == 0) {
 				// We ran out of parents and didn't hit '0', so this page is disconnected
 				echo "Removing unreachable page, ID: {$page->ID}, Class: {$page->ClassName}, Title: {$page->Title}\n";
 
