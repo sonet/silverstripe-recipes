@@ -193,9 +193,9 @@ class SanitiseTasks_CleanHistory extends BuildTask {
 							foreach ($res as $key => $value) {
 								if ($key == 'ID') continue;
 
-								if ($value === null) $updates[] = "$key=NULL";
-								else if (is_numeric($value)) $upates[] = "$key=$value";
-								else $updates[] = "$key='".Convert::raw2sql($value)."'";
+								if ($value === null) $updates[] = "$to.$key=NULL";
+								else if (is_numeric($value)) $updates[] = "$to.$key=$value";
+								else $updates[] = "$to.$key='".Convert::raw2sql($value)."'";
 							}
 
 							if ($updates) DB::query("UPDATE $to SET ".implode(', ', $updates)." WHERE ID = $recordID");
